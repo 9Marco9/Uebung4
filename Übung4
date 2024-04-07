@@ -1,0 +1,88 @@
+
+
+import sys  
+from PyQt5.QtCore import * 
+from PyQt5.QtWidgets import * 
+
+
+class MyWindow(QMainWindow):
+    
+    def __init__(self):
+        super().__init__()  
+
+        self.setWindowTitle("GUI - Programmierung")  
+       
+        layout = QFormLayout()
+
+        
+        self.Vorname = QLineEdit()
+        self.Name = QLineEdit()
+        self.Geburtstag = QDateEdit()
+        self.Adresse = QLineEdit()
+        self.Postleitzahl = QLineEdit()
+        self.Ort = QLineEdit()
+        self.Land = QComboBox()
+        self.Button = QPushButton("Save")
+
+        
+        self.Land.addItems(["Schweiz", "Deutschland", "Österreich"])
+
+        
+        layout.addRow("Vorname:", self.Vorname)
+        layout.addRow("Name:", self.Name)
+        layout.addRow("Geburtstag:", self.Geburtstag)
+        layout.addRow("Adresse:", self.Adresse)
+        layout.addRow("Postleitzahl:", self.Postleitzahl)
+        layout.addRow("Ort:", self.Ort)
+        layout.addRow("Land:", self.Land)
+        layout.addRow(self.Button)
+
+        
+        menubar = self.menuBar()
+        file = menubar.addMenu("File")
+
+        
+        self.save = QAction("Save", self)
+        self.quit = QAction("Quit", self)
+
+        
+        file.addAction(self.save)
+        file.addAction(self.quit)
+
+        
+        self.Button.clicked.connect(self.textFile)
+        self.save.triggered.connect(self.textFile)
+        self.quit.triggered.connect(self.close)
+
+      
+        center = QWidget()
+        center.setLayout(layout)
+        self.setCentralWidget(center)
+
+       
+        self.show()
+
+    
+    def textFile(self):
+        
+        g = self.Geburtstag.date().toString("dd.MM.yyyy")
+        
+        text = f"{self.Vorname.text()},{self.Name.text()},{g},{self.Adresse.text()},{self.Postleitzahl.text()},{self.Ort.text()},{self.Land.currentText()}"
+        
+        file = open("output.txt.", "w", encoding="utf-8")
+        file.write(text)
+        file.close()  
+        print("Die Daten wurden fehlerfrei und erfolgreich gespeichert")
+
+    
+    def close(self):
+        self.close() 
+
+def main():
+    app = QApplication(sys.argv)  
+    mainwindow = MyWindow()  
+    mainwindow.raise_()  
+    app.exec_()  
+
+if __name__ == '__main__':
+    main()  
